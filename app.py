@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-import cloudpickle
+import joblib 
+#import cloudpickle
 
 # ==============================
 #   HEADER & UI
@@ -21,12 +22,14 @@ uploaded_file = st.sidebar.file_uploader("Upload your CSV or Excel file", type=[
 # ==============================
 #   LOAD MODEL + ENCODER
 # ==============================
+import streamlit as st
+import pandas as pd
+import joblib  # <-- important, doit être installé dans l'env
+
 @st.cache_resource
 def load_pipeline():
-    with open("model.pkl", "rb") as f:
-        pipeline = cloudpickle.load(f)
-    with open("target.pkl", "rb") as f:
-        label_encoder = cloudpickle.load(f)
+    pipeline = joblib.load("model.pkl")          # même fichier que dans le notebook
+    label_encoder = joblib.load("target.pkl")    # si tu as aussi l'encodeur
     return pipeline, label_encoder
 
 pipeline, label_encoder = load_pipeline()
