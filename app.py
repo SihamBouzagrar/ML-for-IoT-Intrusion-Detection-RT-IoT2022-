@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-import joblib
-
+#import joblib
+import cloudpickle
 # ==============================
 #   HEADER & UI
 # ==============================
@@ -23,8 +23,8 @@ uploaded_file = st.sidebar.file_uploader("Upload your Excel file", type=["xlsx"]
 # ==============================
 @st.cache_resource
 def load_pipeline():
-    pipeline = joblib.load("model.pkl")
-    label_encoder = joblib.load("target.pkl")
+    pipeline = cloudpickle.load("model.pkl")
+    label_encoder = cloudpickle.load("target.pkl")
     return pipeline, label_encoder
 
 pipeline, label_encoder = load_pipeline()

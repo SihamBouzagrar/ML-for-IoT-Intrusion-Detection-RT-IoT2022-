@@ -2,9 +2,9 @@ streamlit
 pandas
 numpy
 scikit-learn==1.8.0
-xgboost
 imbalanced-learn
+xgboost
 matplotlib
 seaborn
-joblib
+cloudpickle
 openpyxl
