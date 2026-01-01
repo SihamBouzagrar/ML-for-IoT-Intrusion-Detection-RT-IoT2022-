@@ -5,6 +5,7 @@ scikit-learn==1.8.0
 imbalanced-learn
 xgboost
 matplotlib
+joblib
 seaborn
 cloudpickle
 openpyxl
