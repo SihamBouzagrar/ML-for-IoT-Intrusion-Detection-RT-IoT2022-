@@ -23,11 +23,12 @@ uploaded_file = st.sidebar.file_uploader("Upload your Excel file", type=["xlsx"]
 # ==============================
 @st.cache_resource
 def load_pipeline():
-    pipeline = cloudpickle.load("model.pkl")
-    label_encoder = cloudpickle.load("target.pkl")
+    import cloudpickle
+    with open("model.pkl", "rb") as f:
+        pipeline = cloudpickle.load(f)
+    with open("target.pkl", "rb") as f:
+        label_encoder = cloudpickle.load(f)
     return pipeline, label_encoder
-
-pipeline, label_encoder = load_pipeline()
 
 # ==============================
 #   PROCESS FILE
