@@ -2,8 +2,9 @@ streamlit
 pandas
 numpy
 scikit-learn
-joblib
 xgboost
 imbalanced-learn
 matplotlib
 seaborn
+joblib
+openpyxl
