@@ -7,5 +7,5 @@ xgboost
 matplotlib
 joblib
 seaborn
-cloudpickle
+
 openpyxl
