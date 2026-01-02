@@ -85,10 +85,10 @@ with st.sidebar:
     st.divider()
     st.subheader("🎓 Contexte Académique")
     st.info("""
-    **Réalisé par :** Siham Bouzagrar  
+    **Réalisée par :** Siham Bouzagrar  
     **Module :** Machine Learning / Data Science  
     **Encadrant :** Mr. Abdelhamid FADIL  
-    **École :** EHTP
+    
     """)
 
 # ==============================
