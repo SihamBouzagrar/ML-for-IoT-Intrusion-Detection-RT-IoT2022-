@@ -9,11 +9,10 @@ import sklearn
 st.write("scikit-learn version:", sklearn.__version__)
 
 
-# Configuration de la page
-st.set_page_config(page_title="IoT Intrusion Detection", page_icon="🛡️", layout="wide")
 
-st.image("C:\Users\User\OneDrive\Desktop\ML\logo_ehtp.png")
+st.image("http://www.ehtp.ac.ma/images/lo.png")
 st.write("""
+
 ### IoT IDS Prediction App
 This app predicts **Attack Classes** based on IoT traffic data
 """)
