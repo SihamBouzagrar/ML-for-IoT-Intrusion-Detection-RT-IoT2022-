@@ -1,78 +1,77 @@
 import streamlit as st
 import pandas as pd
-import joblib 
-#import cloudpickle
+import pickle
 
 # ==============================
 #   HEADER & UI
 # ==============================
-st.set_page_config(page_title="IoT IDS Prediction", layout="wide")
+import sklearn
+st.write("scikit-learn version:", sklearn.__version__)
 
-st.image("http://www.ehtp.ac.ma/images/lo.png")
+
+# Configuration de la page
+st.set_page_config(page_title="IoT Intrusion Detection", page_icon="🛡️", layout="wide")
+
+st.image("C:\Users\User\OneDrive\Desktop\ML\logo_ehtp.png")
 st.write("""
-## MSDE6 : ML Course
 ### IoT IDS Prediction App
 This app predicts **Attack Classes** based on IoT traffic data
 """)
 
 st.sidebar.image("https://cdn-icons-png.flaticon.com/512/1048/1048949.png", width=250)
-st.sidebar.write("### Load CSV or Excel File for Prediction")
-uploaded_file = st.sidebar.file_uploader("Upload your CSV or Excel file", type=["csv", "xlsx"])
+
+st.sidebar.write("### Load Excel File for Prediction")
+
+uploaded_file = st.sidebar.file_uploader(
+    "Upload your Excel file",
+    type=["xlsx"]
+)
 
 # ==============================
 #   LOAD MODEL + ENCODER
 # ==============================
-import streamlit as st
-import pandas as pd
-import joblib  # <-- important, doit être installé dans l'env
+
 
 @st.cache_resource
 def load_pipeline():
-    pipeline = joblib.load("model.pkl")          # même fichier que dans le notebook
-    label_encoder = joblib.load("target.pkl")    # si tu as aussi l'encodeur
-    return pipeline, label_encoder
-
+    try:
+        with open("pipeline1.pkl", "rb") as f:
+            pipeline1 = pickle.load(f)
+        with open("final_model1.pkl", "rb") as f:
+            label_encoder = pickle.load(f)
+        return pipeline1, label_encoder
+    except Exception as e:
+        st.error(f"Erreur lors du chargement des fichiers pickle : {e}")
+        raise e
 pipeline, label_encoder = load_pipeline()
 
 # ==============================
 #   PROCESS FILE
 # ==============================
+
 if uploaded_file is not None:
-    # Detect file type
-    if uploaded_file.name.endswith(".csv"):
-        df = pd.read_csv(uploaded_file)
-    else:  # Excel
-        df = pd.read_excel(uploaded_file, engine="openpyxl")
-    
+
+    df = pd.read_excel(uploaded_file)
+
     st.subheader("📄 Input Data Preview")
-    st.dataframe(df.head())
+    st.write(df.head())
 
-    # Predict
-    try:
-        predictions = pipeline.predict(df)
-    except ValueError as e:
-        st.error(f"Error: {e}")
-        st.stop()
+    # ---- Prediction ----
+    predictions = pipeline.predict(df)
 
-    # Decode labels
+    # ---- Decode labels ----
     decoded_predictions = label_encoder.inverse_transform(predictions)
 
-    # Probabilities (si le modèle les fournit)
+    st.subheader("🎯 Predicted Class")
+    st.write(decoded_predictions)
+
+    # ---- Probabilities (if available) ----
     if hasattr(pipeline.named_steps["classifier"], "predict_proba"):
         probs = pipeline.predict_proba(df)
         proba_df = pd.DataFrame(probs, columns=label_encoder.classes_)
-    else:
-        proba_df = None
 
-    # ==============================
-    #   DISPLAY RESULTS
-    # ==============================
-    st.subheader("🎯 Predicted Class")
-    st.dataframe(decoded_predictions)
-
-    if proba_df is not None:
         st.subheader("📊 Prediction Probabilities")
-        st.dataframe(proba_df)
+        st.write(proba_df)
 
 else:
-    st.info("➡️ Please upload a CSV or Excel file to start prediction.")
+    st.write("➡️ Please upload an Excel (.xlsx) file to start prediction.")
